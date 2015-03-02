@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+################################################################################
+#   bin/admin
+#     Generates Admin components for a Model in a Rails Application
+#
+#     Command samples:
+#       $ bin/admin g User
+#       $ bin/admin d User
+#
+#   31.01.2015  ZT
+#   23.02.2015  v 1.0.0
+#   01.03.2015  v 1.1.0
+################################################################################
+require 'active_support/inflector'
+
+# Identify Paths
+bin_path      = File.dirname(File.expand_path(__FILE__))
+$app_root     = bin_path.chomp('/bin')
+$migrate_path = "#{$app_root}/db/migrate"
+$bkc_path     = "#{$app_root}/lib/bkc_admin"
+
+require "#{$bkc_path}/lib"                # BKC methods library
+
+verify_command_line
+get_names
+
+if $mode == 'generate'  # Generate Admin directories and files
+  get_attributes
+
+  require "#{$bkc_path}/controller"       # Admin Controller
+  require "#{$bkc_path}/helper"           # Admin Helpers
+  require "#{$bkc_path}/add_resource"     # Update config/routes.rb file
+
+  # Generate Admin Views for the Model
+  create_views_path
+  require "#{$bkc_path}/view_index"       # View:     index
+  require "#{$bkc_path}/view_show"        # View:     show
+  require "#{$bkc_path}/view_new"         # View:     new
+  require "#{$bkc_path}/view_edit"        # View:     edit
+  require "#{$bkc_path}/view_form"        # Partial: _form
+
+else                    # Destroy Admin files and directories
+  require "#{$bkc_path}/destroy"          # Destroy files and directories
+  require "#{$bkc_path}/remove_resource"  # Remove resource from config/routes.rb file
+end

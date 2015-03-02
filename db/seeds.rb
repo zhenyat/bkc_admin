@@ -5,3 +5,10 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Role.create name: 'guest',    title: 'Гость'
+Role.create name: 'account',  title: 'Эккаунт'
+Role.create name: 'admin',    title: 'Администратор'
+Role.create name: 'sysadmin', title: 'Системный администратор'
+
+Product.create name: 'PC', title: 'ПК', description: 'Это есть ПК для тестирования.\nДемо образец', price: 1250.00
