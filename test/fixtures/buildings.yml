@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  building_type_id: 
+  name: MyString
+  title: MyString
+  status: 1
+
+two:
+  building_type_id: 
+  name: MyString
+  title: MyString
+  status: 1

@@ -11,7 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150302211429) do
+ActiveRecord::Schema.define(version: 20150304170753) do
+
+  create_table "building_types", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "title",      limit: 255
+    t.integer  "status",     limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "buildings", force: :cascade do |t|
+    t.integer  "building_type_id", limit: 4
+    t.string   "name",             limit: 255
+    t.string   "title",            limit: 255
+    t.integer  "status",           limit: 4
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "buildings", ["building_type_id"], name: "index_buildings_on_building_type_id", using: :btree
 
   create_table "products", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -24,6 +43,15 @@ ActiveRecord::Schema.define(version: 20150302211429) do
     t.datetime "updated_at",                                              null: false
   end
 
+  create_table "red_wine_children", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "age",        limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "red_wine_children", ["name"], name: "index_red_wine_children_on_name", unique: true, using: :btree
+
   create_table "roles", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.string   "title",      limit: 255
@@ -34,10 +62,10 @@ ActiveRecord::Schema.define(version: 20150302211429) do
 
   create_table "users", force: :cascade do |t|
     t.integer  "role_id",         limit: 4
-    t.string   "last_name",       limit: 255
-    t.string   "first_name",      limit: 255
+    t.string   "last_name",       limit: 255,             null: false
+    t.string   "first_name",      limit: 255,             null: false
     t.date     "birthday"
-    t.string   "email",           limit: 255
+    t.string   "email",           limit: 255,             null: false
     t.string   "phone",           limit: 255
     t.string   "password_digest", limit: 255
     t.string   "remember_digest", limit: 255
@@ -46,7 +74,9 @@ ActiveRecord::Schema.define(version: 20150302211429) do
     t.datetime "updated_at",                              null: false
   end
 
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
 
+  add_foreign_key "buildings", "building_types"
   add_foreign_key "users", "roles"
 end

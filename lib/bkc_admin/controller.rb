@@ -5,6 +5,7 @@
 #
 #   25.01.2015  ZT
 #   23.02.2015  v 1.0.0
+#   04.03.2015  v 1.1.0
 ################################################################################
 # admin directory
 relative_path = 'app/controllers/admin'
@@ -60,7 +61,18 @@ file.puts "\n\tdef #{$name}_scope\n\t\t#{$model}.all\n\tend\n"
 # FK scopes
 unless $references_names.empty?
   $attr_names.each do |attr_name|
-    file.puts "\n\tdef #{attr_name}_scope\n\t\t#{attr_name.capitalize}.active\n\tend\n" if $references_names.include? attr_name
+    if $references_names.include? attr_name
+      if attr_name.include? "_"             # Compound model name e.g. building_type
+        words = attr_name.split "_"
+        compound_model_name = ""
+        words.each do |word|
+          compound_model_name << word.capitalize
+        end
+        file.puts "\n\tdef #{attr_name}_scope\n\t\t#{compound_model_name}.active\n\tend\n"
+      else
+        file.puts "\n\tdef #{attr_name}_scope\n\t\t#{attr_name.capitalize}.active\n\tend\n"
+      end
+    end
   end
 end
 

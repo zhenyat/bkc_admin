@@ -5,7 +5,8 @@
 # 31.01.2015  ZT
 # 23.02.2015  v 1.0.0
 # 28.02.2015  v 1.0.1
-# 01.03.2015  v 1.1.0  (sort_object helper added)
+# 01.03.2015  v 1.1.0  sort_object helper added
+# 03.03.2015  v 1.2.0  Compound names handling
 ################################################################################
 
 BLACK = 'black'
@@ -130,7 +131,7 @@ def get_attributes
 
     # Collect attributes parsing lines of a migration file
     lines.each do |line|
-      if line.match("t.") && !line.match("t.timestamps") && !line.match("create_table") && !line.match("class")
+      if line.match("t.") && !line.match("t.timestamps") && !line.match("create_table") && !line.match("class") && !line.match("add_index") &&!line.match("add_foreign_key")
 
         # remove non-attribute text
         if line.match(",")            # aka:  t.boolean :stock, default: true
@@ -155,17 +156,38 @@ def get_attributes
       $password_attribute = true      if pair.first == 'password'
     end
   else
-    puts "Файл миграции для модели #{$model} не найден"
+    puts colored(RED, "Файл миграции для модели #{$model} не найден")
     exit
   end
 end
 
 # Gets Model names (capitalized and plural)
 def get_names
-  $model  = ARGV[1].capitalize    # e.g.  City
-  $models = $model.pluralize      # e.g.  Cities
-  $name   = $model.downcase       # e.g.  city
-  $names  = $name.pluralize       # e.g.  cities
+  count = ARGV[1].scan(/\p{Upper}/).count  # Number of uppercase characters
+
+  if count > 1                      # Compound name
+    $model  = ARGV[1]
+    $models = $model.pluralize
+    $name   = ARGV[1][0].downcase
+    string  = ARGV[1][1..-1]
+    string.chars do |c|
+      if c.match(/\p{Upper}/)
+        $name << '_' << c.downcase
+      else
+        $name << c
+      end
+    end
+    $names = $name.pluralize
+#    puts $model; puts $models; puts $name; puts $names
+#    exit
+  else                              # Simple name
+    $model  = ARGV[1].capitalize    # e.g.  City
+    $models = $model.pluralize      # e.g.  Cities
+    $name   = $model.downcase       # e.g.  city
+    $names  = $name.pluralize       # e.g.  cities
+#    puts $model; puts $models; puts $name; puts $names
+#    exit
+  end
 
   # Special attribute cases (identified in 'get_attributes')
   $references_names    = []
