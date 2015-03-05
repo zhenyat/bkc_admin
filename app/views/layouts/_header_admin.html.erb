@@ -1,0 +1,13 @@
+<header>
+  <% if logged_in? %>
+    <div align="right">
+      <%= link_to "Log out", logout_path, method: "delete" %>
+    </div>
+  <% end %>
+
+  <%= favicon_link_tag  'bkc_ih.ico' %>
+  <%= link_to image_tag('admin/config.png', alt: '', title: 'На главную'), admin_root_path %>
+
+  <h1>Обучение за рубежом</h1>
+  <h2>Модуль Администратора</h2>
+</header>

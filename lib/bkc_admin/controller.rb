@@ -6,6 +6,7 @@
 #   25.01.2015  ZT
 #   23.02.2015  v 1.0.0
 #   04.03.2015  v 1.1.0
+#   05.03.2015  v 1.2.0   activate admin module and layout
 ################################################################################
 # admin directory
 relative_path = 'app/controllers/admin'
@@ -23,8 +24,8 @@ file = File.open(absolute_path, 'w')
 
 # Generate controller code
 file.puts "class Admin::#{$models}Controller < ApplicationController"
-#file.puts "\tinclude AdminAccess\n\tlayout 'admin'\n\n"
-#file.puts "\tbefore_filter :check_login"
+file.puts "\tinclude AdminAccess\n\tlayout 'admin'\n\n"
+file.puts "\tbefore_filter :check_login"
 file.puts "\tbefore_action :set_#{$name}, only: [:show, :edit, :update,:destroy]"
 
 file.puts "\n\tdef create\n\t\tbuild_#{$name}\n\t\tsave_#{$name} or render 'new'\n\tend"
