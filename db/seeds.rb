@@ -11,4 +11,7 @@ Role.create name: 'account',  title: 'Эккаунт'
 Role.create name: 'admin',    title: 'Администратор'
 Role.create name: 'sysadmin', title: 'Системный администратор'
 
+role_id = Role.find_by(name: 'admin').id
+User.create role_id: role_id, last_name: 'Dummy', first_name: 'Bob', birthday: '1990-01-25', email: 'bdummy@inbox.ru', phone: '903 123 4567'
+
 Product.create name: 'PC', title: 'ПК', description: 'Это есть ПК для тестирования.\nДемо образец', price: 1250.00

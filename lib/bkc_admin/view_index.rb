@@ -6,6 +6,7 @@
 #
 #   01.02.2014  ZT
 #   24.02.2015  v 1.0.0
+#   05.03.2015  v 1.1.0 view of references type updated
 ################################################################################
 relative_path = "#{$relative_views_path}/index.html.haml"
 action_report relative_path
@@ -27,11 +28,15 @@ file.puts "      %th Actions"
 file.puts "\n  %tbody"
 file.puts "    - @#{$names}.each do |#{$name}|"
 file.puts "      %tr"
-$attr_names.each do |attr_name|
-  if attr_name == 'status'
-    file.puts "        %td= status_mark #{$name}.#{attr_name}"
+$attr_names.each_with_index do |attr_name, index|
+  if $attr_types[index] == 'references'
+    file.puts "        %td= #{$name}.#{attr_name}.title"
   else
-    file.puts "        %td= #{$name}.#{attr_name}" unless attr_name.include?('password') || attr_name.include?('remember')
+    if attr_name == 'status'
+      file.puts "        %td= status_mark #{$name}.#{attr_name}"
+    else
+      file.puts "        %td= #{$name}.#{attr_name}" unless attr_name.include?('password') || attr_name.include?('remember')
+    end
   end
 end
 
